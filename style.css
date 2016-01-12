@@ -1,0 +1,8 @@
+#console{
+	background-color: #EFEFEF;
+	height: 300px;
+    overflow-y: scroll;	
+    border: 2px ridge black; 
+    margin-top : 20px; 
+    text-align: justify;
+}

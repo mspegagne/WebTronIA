@@ -4,6 +4,7 @@ window.onload = function() {
 
   var FRAMEDELAY = 100;
   var p1ai = false;
+  var limitCalc = 50;
 
   var canvas = document.getElementById('canvas');
   var ctx = canvas.getContext('2d');
@@ -56,8 +57,6 @@ window.onload = function() {
 
     drawPlayer(p1x,p1y,1);
     drawPlayer(p2x,p2y,2);
-
-    document.getElementById('result').innerHTML = "";
 
     tmr = setInterval(frame, FRAMEDELAY);
   }
@@ -112,6 +111,15 @@ window.onload = function() {
     ctx.fillRect(x*10, y*10, 9, 9);
   }
 
+  function isWall(x,y) {
+    if(map[x+y*w] !== 0)
+      return true;
+  }
+
+  function isStuck(x,y) {
+    return isWall(x+1, y) && isWall(x-1, y) && isWall(x, y+1) && isWall(x, y-1)
+  }
+
   function drawPlayer(x,y,player) {
     map[x+y*w] = player;
     ctx.fillStyle = player == 1 ? "#00f" : "#f00";
@@ -120,7 +128,7 @@ window.onload = function() {
 
   function draw() {
     clearInterval(tmr); tmr=undefined;
-    document.getElementById('result').innerHTML = "both players crashed; draw!<br>";
+    writeConsole("both players crashed; draw!");
     gameover = true;
   }
 
@@ -129,16 +137,196 @@ window.onload = function() {
     var other = 3-player;
     ctx.fillStyle = player == 1 ? "#00a" : "#a00";
     ctx.fillRect(x*10,y*10,9,9);
-    document.getElementById('result').innerHTML = "player "+player+" crashed; player "+other+" wins!<br>";
+    writeConsole("player "+player+" crashed; player "+other+" wins!");
     gameover = true;
+  }
+
+  function writeConsole(message) {
+    document.getElementById('console').innerHTML += message+"<br>";
+    document.getElementById('console').scrollTop +=100;
   }
  
   // RandomAI
   function randomAI()
   {
-    if(p1ai) p1move= 0|(Math.random()*4);
-    p2move = 0|(Math.random()*4);
+    return 0|(Math.random()*4);
   }
+
+  // lineDist based AI
+  // Move if there is a longer distance to a wall
+  function lineDist(player)
+  {
+    if(player === 'p1')
+    {
+      var x = p1x,
+          y = p1y,
+          idx = p1x+p1y*w;;
+
+    }
+    if(player === 'p2')
+    {
+      var x = p2x,
+          y = p2y,
+          idx = p2x+p2y*w;;
+    }
+
+    var move, newX, newY;
+    var bestHeur = 0;
+    var bestMove = 0;
+
+    for(var move = 0; move<4; move++){
+        var heur = 0;
+        newX = x + dx[move];
+        newY = y + dy[move];
+        while(!isWall(newX, newY)){
+            heur++;
+            newX += dx[move];
+            newY += dy[move];
+        }
+        if(heur>bestHeur){
+            bestHeur = heur;
+            bestMove = move;
+        }
+    }
+  
+    writeConsole(bestHeur);
+    return bestMove;
+  }
+
+  // AI with snail comportement
+  // Move when wall to the longest direction
+  function snailAI(player)
+  {
+    if(player === 'p1')
+    {
+      var x = p1x,
+          y = p1y,
+          idx = p1x+p1y*w,
+          move = p1move;
+
+
+    }
+    if(player === 'p2')
+    {
+      var x = p2x,
+          y = p2y,
+          idx = p2x+p2y*w,
+          move = p2move;
+    }
+
+    var newMove, newX, newY;
+    var bestHeur = 0;
+    var bestMove = move;
+
+    newX = x + dx[move];
+    newY = y + dy[move];
+    if(isWall(newX,newY)){
+
+        for(newMove = 0; newMove<4; newMove++){
+            var heur = 0;
+            newX = x + dx[newMove];
+            newY = y + dy[newMove];
+            var altMove = newMove
+            while(!isStuck(newX, newY) && !isWall(newX, newY)){
+                heur++;
+                newX += dx[newMove];
+                newY += dy[newMove];
+                if(isWall(newX, newY)){
+                    var altMove = newMove;
+                    if(newY<(h/2) && (newMove%2) === 0){
+                        altMove=1;  
+                    }
+                    if(newY>(h/2) && (newMove%2) === 0){
+                        altMove=3;  
+                    }
+                    if(newX<(w/2) && (newMove%2) === 1){
+                        altMove=2;  
+                    }
+                    if(newX>(w/2) && (newMove%2) === 1){
+                        altMove=0;  
+                    }                
+                    newX += dx[altMove];
+                    newY += dy[altMove];
+                }          
+            }
+            if(heur>bestHeur){
+                bestHeur = heur;
+                bestMove = newMove;
+            }
+        }
+    }
+  
+    writeConsole(bestHeur);
+    return bestMove;
+  }
+
+  // AI with snail comportement
+  // Move when wall to the longest direction
+  function snailAI(player)
+  {
+    if(player === 'p1')
+    {
+      var x = p1x,
+          y = p1y,
+          idx = p1x+p1y*w,
+          move = p1move;
+
+
+    }
+    if(player === 'p2')
+    {
+      var x = p2x,
+          y = p2y,
+          idx = p2x+p2y*w,
+          move = p2move;
+    }
+
+    var newMove, newX, newY;
+    var bestHeur = 0;
+    var bestMove = move;
+
+    newX = x + dx[move];
+    newY = y + dy[move];
+    if(isWall(newX,newY)){
+
+        for(newMove = 0; newMove<4; newMove++){
+            var heur = 0;
+            newX = x + dx[newMove];
+            newY = y + dy[newMove];
+            var altMove = newMove
+            while(!isStuck(newX, newY) && !isWall(newX, newY)){
+                heur++;
+                newX += dx[newMove];
+                newY += dy[newMove];
+                if(isWall(newX, newY)){
+                    var altMove = newMove;
+                    if(newY<(h/2) && (newMove%2) === 0){
+                        altMove=1;  
+                    }
+                    if(newY>(h/2) && (newMove%2) === 0){
+                        altMove=3;  
+                    }
+                    if(newX<(w/2) && (newMove%2) === 1){
+                        altMove=2;  
+                    }
+                    if(newX>(w/2) && (newMove%2) === 1){
+                        altMove=0;  
+                    }                
+                    newX += dx[altMove];
+                    newY += dy[altMove];
+                }          
+            }
+            if(heur>bestHeur){
+                bestHeur = heur;
+                bestMove = newMove;
+            }
+        }
+    }
+  
+    writeConsole(bestHeur);
+    return bestMove;
+  }
+
 
   function frame() {
     //Manage keyboard inputs
@@ -152,7 +340,8 @@ window.onload = function() {
     }
 
     //Run the AI
-    randomAI();
+    if(p1ai) p1move= lineDist('p1');
+    p2move = snailAI ('p2');
 
     //Make the move
     p1x += dx[p1move]; p1y += dy[p1move];
@@ -176,10 +365,6 @@ window.onload = function() {
       drawPlayer(p2x,p2y,2);
     }
 
-    if(!gameover) {
-      document.getElementById('result').innerHTML = "AI score: *** (p1:"+p1score+" p2:"+p2score+")";
-    }
-    
     var lastmove = p1move;
   }
 
