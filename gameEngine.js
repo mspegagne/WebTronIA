@@ -260,72 +260,7 @@ window.onload = function() {
     return bestMove;
   }
 
-  // AI with snail comportement
-  // Move when wall to the longest direction
-  function snailAI(player)
-  {
-    if(player === 'p1')
-    {
-      var x = p1x,
-          y = p1y,
-          idx = p1x+p1y*w,
-          move = p1move;
-
-
-    }
-    if(player === 'p2')
-    {
-      var x = p2x,
-          y = p2y,
-          idx = p2x+p2y*w,
-          move = p2move;
-    }
-
-    var newMove, newX, newY;
-    var bestHeur = 0;
-    var bestMove = move;
-
-    newX = x + dx[move];
-    newY = y + dy[move];
-    if(isWall(newX,newY)){
-
-        for(newMove = 0; newMove<4; newMove++){
-            var heur = 0;
-            newX = x + dx[newMove];
-            newY = y + dy[newMove];
-            var altMove = newMove
-            while(!isStuck(newX, newY) && !isWall(newX, newY)){
-                heur++;
-                newX += dx[newMove];
-                newY += dy[newMove];
-                if(isWall(newX, newY)){
-                    var altMove = newMove;
-                    if(newY<(h/2) && (newMove%2) === 0){
-                        altMove=1;  
-                    }
-                    if(newY>(h/2) && (newMove%2) === 0){
-                        altMove=3;  
-                    }
-                    if(newX<(w/2) && (newMove%2) === 1){
-                        altMove=2;  
-                    }
-                    if(newX>(w/2) && (newMove%2) === 1){
-                        altMove=0;  
-                    }                
-                    newX += dx[altMove];
-                    newY += dy[altMove];
-                }          
-            }
-            if(heur>bestHeur){
-                bestHeur = heur;
-                bestMove = newMove;
-            }
-        }
-    }
   
-    writeConsole(bestHeur);
-    return bestMove;
-  }
 
 
   function frame() {
