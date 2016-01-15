@@ -70,6 +70,7 @@ window.onload = function(){
 
     this.addPlayerCrashed = function(player){
       this.map[player.idx] = player.id+2;
+      this.gameover = true;
     }
 
     this.isWall = function(x,y){
