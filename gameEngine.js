@@ -18,7 +18,8 @@ window.onload = function(){
     this.id = id;
     this.startPos = 0;    
     this.x = 0;
-    this.y = 0;      
+    this.y = 0;
+    this.space = 0;      
     this.w = 0;
     this.idx = 0;  
     this.move = move;  //Move: 0 = left, 1 = up, 2 = right, 3 = down (corresponds to keyCode-37)
@@ -70,16 +71,11 @@ window.onload = function(){
 
     this.addPlayerCrashed = function(player){
       this.map[player.idx] = player.id+2;
-      this.gameover = true;
+      this.gameover = true; 
     }
 
     this.isWall = function(x,y){
-      if(this.map[x+y*this.w] !== 0){
-        return true;        
-      }
-      else{
-        return false;
-      }
+      return this.map[x+y*this.w] !== 0;
     }
 
     this.isStuck = function(x,y){
@@ -132,7 +128,6 @@ window.onload = function(){
     }
 
     this.addBlocks = function(){
-
       var numBlocks=Math.random()*10; // Generate a random map with a random number of blocks
 
       for(var n=0;n<numBlocks;n++){
@@ -155,6 +150,52 @@ window.onload = function(){
           if(y<2) y=2; if(y>this.h-3) y=this.h-3;
         }
       }
+    }
+
+    this.score = function(player){
+      var score = 0;
+      var adv = (player.id === 1 ? this.p2 : this.p1);
+      this.spaceCounting(this.p1);
+      this.spaceCounting(this.p2);
+
+      if(this.isStuck(adv.x,adv.y)){
+        score += 100;
+      }
+      if(this.isStuck(player.x,player.y)){
+        score -= 100;
+      }
+      if(player.space !== adv.space){
+        score = player.space - adv.space;
+      }
+      else{
+        score = 0;
+      }
+      return score;
+    }
+
+    //Evaluate the free space from x,y. Used in blockCounting
+    //Recursive function
+    this.propagation = function(access,x,y,player){
+      for(var i=(x-1);i<=(x+1);i++){
+        for(var j=(y-1);j<=(y+1);j++){
+          if(i<this.w && i>=0 && j<this.h && j>=0 && !this.isWall(i,j) && access[i+j*this.w] !== 1){
+            access[i+j*this.w] = 1;
+            player.space++ ;
+            this.propagation(access,i,j,player);              
+          }          
+        }
+      }
+    }
+
+    this.spaceCounting = function(player){
+      //init access
+      var access = [];      
+      for(var j=0;j<this.h*this.w;j++){ 
+        access[j] = 0; 
+      }
+      player.space = 0;
+      this.propagation(access,player.x,player.y,player);
+      return player.space;
     }
 
     this.init = function(){ 
@@ -372,6 +413,9 @@ window.onload = function(){
     //Make the p2 move
     p2.updatePosition(p2.x+dx[p2.move],p2.y+dy[p2.move]); 
     game.addPlayer(p2);
+
+    writeConsole('Score p1 '+game.score(p1));
+    writeConsole('Score p2 '+game.score(p2));
 
     //Manage the game 
     if((previousGame.isWall(p1.x, p1.y) && previousGame.isWall(p2.x, p2.y)) || (p1.idx === p2.idx)){
