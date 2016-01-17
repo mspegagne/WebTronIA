@@ -178,14 +178,19 @@ window.onload = function(){
     //Evaluate the free space from x,y. Used in blockCounting
     //Recursive function
     this.propagation = function(access,x,y,player){
-      for(var i=(x-1);i<=(x+1);i++){
-        for(var j=(y-1);j<=(y+1);j++){
-          if(i<this.w && i>=0 && j<this.h && j>=0 && !this.isWall(i,j) && access[i+j*this.w] !== 1){
-            access[i+j*this.w] = 1;
+      for(var i=(x-1);i<=(x+1);i++){        
+          if(i<this.w && i>=0 && y<this.h && y>=0 && !this.isWall(i,y) && access[i+y*this.w] !== 1){
+            access[i+y*this.w] = 1;
             player.space++;
-            this.propagation(access,i,j,player);              
+            this.propagation(access,i,y,player);              
           }          
-        }
+      }
+      for(j=(y-1);j<=(y+1);j++){
+        if(x<this.w && x>=0 && j<this.h && j>=0 && !this.isWall(x,j) && access[x+j*this.w] !== 1){
+          access[x+j*this.w] = 1;
+          player.space++;
+          this.propagation(access,x,j,player);              
+        }          
       }
     }
 
@@ -349,8 +354,7 @@ window.onload = function(){
   
   // AI with snail comportement
   // Move when wall to the longest direction
-  function snailAI(game,player)
-  {
+  function snailAI(game,player){
     var x = player.x;
     var y = player.y;
     var idx = player.idx;
@@ -413,7 +417,7 @@ window.onload = function(){
     else if(maximizing){
       var bestValue = -3000;
       for(var newMove = 0; newMove<4; newMove++){
-        newNode = clone(node);
+        var newNode = clone(node);
         adv = (player.id === 1 ? newNode.p2 : newNode.p1);    
         newPlayer = (player.id === 1 ? newNode.p1 : newNode.p2);
         newPlayer.move = newMove;
@@ -430,7 +434,7 @@ window.onload = function(){
     else{
       var bestValue = 3000;
       for(var newMove = 0; newMove<4; newMove++){
-        newNode = clone(node);
+        var newNode = clone(node);
         adv = (player.id === 1 ? newNode.p2 : newNode.p1);    
         newPlayer = (player.id === 1 ? newNode.p1 : newNode.p2);
         newPlayer.move = newMove;
@@ -444,45 +448,6 @@ window.onload = function(){
       }
       return [bestValue,bestMove];
     }
-
-/*
-    if(depth === 0 || newNode.gameover){
-      return [newNode.score(newPlayer),player.move];
-    }
-
-    if(maximizing){
-      var bestValue = -3000;
-      for(var newMove = 0; newMove<4; newMove++){
-        newNode = clone(node);
-        adv = (player.id === 1 ? newNode.p2 : newNode.p1);    
-        newPlayer = (player.id === 1 ? newNode.p1 : newNode.p2);
-        newPlayer.move = newMove;
-        newPlayer.updatePosition(newPlayer.x+dx[newPlayer.move],newPlayer.y+dy[newPlayer.move]); 
-        newNode.addPlayer(newPlayer);
-        var value = minimaxAI(newNode,(depth-1),false,adv)[0];
-        bestValue = Math.max(bestValue,value);
-        if(bestValue === value){
-          bestMove = newMove;
-        }
-      }
-      return [bestValue,bestMove];
-    }
-
-    else{
-      var bestValue = 3000;
-      for(var newMove = 0; newMove<4; newMove++){
-        adv.move = newMove;
-        adv.updatePosition(adv.x+dx[adv.move],adv.y+dy[adv.move]); 
-        newNode.addPlayer(adv);
-        var value = minimaxAI(newNode,(depth-1),true,adv)[0];
-        bestValue = Math.min(bestValue,value);
-        if(bestValue === value){
-          bestMove = newMove;
-        }
-      }
-      return [bestValue,bestMove];
-    }
-    */
   }
   
 
