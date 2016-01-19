@@ -2,8 +2,8 @@ window.onload = function(){
 
   //////////////////// VARIABLES FOR GAMEENGINE ////////////////////////
   
-  var FRAMEDELAY = 100;
-  var limitCalc = 3; //Depth of Minimax algo
+  var FRAMEDELAY = 120;
+  var limitCalc = 4; //Depth of Minimax algo
   var dx = [-1,0,1,0]; //Use to calcuate the coordinates
   var dy = [0,-1,0,1]; 
   var tmr;  //Timer   
@@ -56,8 +56,8 @@ window.onload = function(){
     this.map = []; // Map: 0 = empty, -1 = wall, 1 = player 1, 2 = player 2, 3 = player 1 crashed, 4 = player 2 crashed
     this.w = 0|(canvas.width/10); // width and height constants
     this.h = 0|(canvas.height/10);
-    this.p1 = new Player(1,true,0);
-    this.p2 = new Player(2,true,2);
+    this.p1 = new Player(1,true,2);
+    this.p2 = new Player(2,true,0);
     this.gameover = false;
 
     this.addWall = function(x,y){
@@ -179,11 +179,11 @@ window.onload = function(){
     //Recursive function
     this.propagation = function(access,x,y,player){
       for(var i=(x-1);i<=(x+1);i++){        
-          if(i<this.w && i>=0 && y<this.h && y>=0 && !this.isWall(i,y) && access[i+y*this.w] !== 1){
-            access[i+y*this.w] = 1;
-            player.space++;
-            this.propagation(access,i,y,player);              
-          }          
+        if(i<this.w && i>=0 && y<this.h && y>=0 && !this.isWall(i,y) && access[i+y*this.w] !== 1){
+          access[i+y*this.w] = 1;
+          player.space++;
+          this.propagation(access,i,y,player);              
+        }          
       }
       for(j=(y-1);j<=(y+1);j++){
         if(x<this.w && x>=0 && j<this.h && j>=0 && !this.isWall(x,j) && access[x+j*this.w] !== 1){
