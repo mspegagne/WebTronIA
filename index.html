@@ -9,22 +9,41 @@
   <meta name="author" content="Spegagne - Millet">
   
   <!-- CSS -->
-
   <link rel="stylesheet" href="style.css">
-
-  <!-- Fonts -->
-   
+  
+  <!-- Script -->   
   <script src="gameEngine.js"></script>
 
 </head>
 
 <body>
- 
-<center>
-  <canvas id="canvas" width="400" height="300">
-  </canvas>
-</center>
-<div id="console"></div>
+<div class="container">
+	<h1> TRON GAME </h1>
+	
+	<canvas id="canvas" width="400" height="300"></canvas>
+	
+	<div id="console"></div>
+	
+	<div class="segmented-control">
+		<input type="radio" name="btn" id="gamebtn">
+		<input type="radio" name="btn" id="modebtn" checked>
+		<input type="radio" name="btn" id="creditsbtn">
+
+		<label for="gamebtn" data-value="Game">Game</label>
+		<label for="modebtn" data-value="Mode">Mode</label>
+		<label for="creditsbtn" data-value="Credits">Credits</label>
+	</div>
+	
+	<div class="flex-content">	
+		<label class="item">PLAYER vs AI</label>
+		<div class="onoffswitch item">
+			<input type="checkbox" name="switch" class="onoffswitch-checkbox" id="switch" checked>
+			<label class="onoffswitch-label" for="switch"></label>
+		</div>
+		<label class="item">AI vs AI</label>
+	</div>
+	
+</div>
 
 </body>
 </html>

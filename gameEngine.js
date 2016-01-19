@@ -1,5 +1,4 @@
 window.onload = function(){
-
   //////////////////// VARIABLES FOR GAMEENGINE ////////////////////////
   
   var FRAMEDELAY = 120;
@@ -44,7 +43,7 @@ window.onload = function(){
 
     this.updatePosition = function(x,y){
       this.x = x;
-      this.y = y;      
+      this.y = y;
       this.idx = this.x+this.y*this.w; 
     }
 
@@ -52,7 +51,6 @@ window.onload = function(){
 
 
   var Game = function(){
-    
     this.map = []; // Map: 0 = empty, -1 = wall, 1 = player 1, 2 = player 2, 3 = player 1 crashed, 4 = player 2 crashed
     this.w = 0|(canvas.width/10); // width and height constants
     this.h = 0|(canvas.height/10);
@@ -252,16 +250,16 @@ window.onload = function(){
 
   //Write 'message' in div console
   function writeConsole(message) {
-    document.getElementById('console').innerHTML += message+"<br>";
-    document.getElementById('console').scrollTop +=100;
+    document.getElementById('console').innerHTML = message; //+"<br>";
+    //document.getElementById('console').scrollTop +=100;
   }
  
   //Keyboard listener to manage the keyboard inputs
   document.onkeydown = function(e) {
-    //document.getElementById('d').innerHTML = "key: " + e.keyCode;
+	//writeConsole("key: " + e.keyCode);
     switch(e.keyCode) {
-      case 32: // space
-        if(tmr) {
+      case 32: // space       
+		if(tmr) {
           clearInterval(tmr);
           tmr = undefined;
         } else {
@@ -274,6 +272,7 @@ window.onload = function(){
         break;
       case 65: // A
         game.p1.ai = !game.p1.ai;
+		
         break;
       case 37: // left
       case 38: // up
@@ -289,6 +288,11 @@ window.onload = function(){
         break;
     }
   }
+  
+	/* Toggle the game mode */
+	document.getElementById('switch').onclick = function(){ 
+		game.p1.ai = this.checked;
+	}
 
   //////////////////// GAME'S FUNCTIONS ////////////////////////
 
@@ -298,19 +302,31 @@ window.onload = function(){
     game.draw(canvas);
     moveq = [];
     tmr = setInterval(frame, FRAMEDELAY);
+	// back to the AI vs AI mode
+	document.getElementById('switch').checked = true;
+	// clear the console
+	writeConsole("");
   }
 
   //Ex Aequo
   function draw(){
     clearInterval(tmr); tmr=undefined;
-    writeConsole("both players crashed; draw!");
+    //writeConsole("both players crashed; draw!");
+	writeConsole("draw!");
   }
 
   //Player Crash
   function crash(player){
-    clearInterval(tmr); tmr=undefined;
-    var other = 3-player.id;
-    writeConsole("player "+player.id+" crashed; player "+other+" wins!");
+    clearInterval(tmr);
+	tmr=undefined;
+	if(player.id == 1 && !game.p1.ai){
+		writeConsole("You lose!");
+	}else if(player.id == 2 && !game.p1.ai){
+		writeConsole("You win!");
+	}else{	
+		var other = 3-player.id;
+		writeConsole("player "+player.id+" crashed<br/> player "+other+" wins!");
+	}
   }
 
 
@@ -471,11 +487,11 @@ window.onload = function(){
     var p2 = game.p2;
 
     //Run the AI
-    if(p1.ai){ p1.move = lineDist(game, p1); }
+    if(p1.ai){ p1.move = lineDist(game, p1);}
     //p2.move = snailAI(game, p2);
     var minimax = minimaxAI(game, limitCalc, true, p2, p2);
     p2.move = minimax[1];
-    writeConsole(minimax[0]);
+    //writeConsole(minimax[0]);
 
     //Make the p1 move
     p1.updatePosition(p1.x+dx[p1.move],p1.y+dy[p1.move]); 
