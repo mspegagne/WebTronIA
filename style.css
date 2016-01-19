@@ -4,10 +4,7 @@
 }
 
 body {
-	margin: 2rem;
 	font-family: "SF", Helvetica;
-	display: -webkit-flex;
-	display: flex;
 }
 
 a {
@@ -16,23 +13,6 @@ a {
 }
 a:hover {
   text-decoration: underline;
-}
-
-/*#console{
-	background-color: #EFEFEF;
-	height: 300px;
-	overflow-y: scroll;	
-	border: 2px ridge black; 
-	margin-top : 20px; 
-	text-align: justify;
-}*/
-
-#console{	
-	border: 2px ridge black; 
-	margin : 20px;
-	text-align: center;
-	padding: 5px;
-	text-transform: uppercase;
 }
 
 .container{
@@ -52,45 +32,29 @@ a:hover {
 	margin: 5px;
 }
 
-/** Toggle button **/ 
-.onoffswitch {
-    position: relative; width: 60px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
-}
-.onoffswitch-checkbox {
-    display: none;
-}
-.onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    height: 30px; padding: 0; line-height: 30px;
-    border: 2px solid #CCCCCC; border-radius: 30px;
-    background-color: #FFFFFF;
-    transition: background-color 0.3s ease-in;
-}
-.onoffswitch-label:before {
-    content: "";
-    display: block; width: 30px; margin: 0px;
-    background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
-    right: 28px;
-    border: 2px solid #CCCCCC; border-radius: 30px;
-    transition: all 0.3s ease-in 0s; 
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label {
-    background-color: #4CD964;
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
-   border-color: #4CD964;
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label:before {
-    right: 0px; 
+/** Console **/
+#console {
+	color: transparent;
+	font-size: 2rem;
+	letter-spacing: 5px;
+	margin : 20px;
+	text-align: center;
+	padding: 5px;
+	text-transform: uppercase;
+	border: 4px solid transparent;
+	border-image: linear-gradient(45deg, #FF6F8B, #95E8A4);
+	border-image-slice: 1;
+	background: linear-gradient(45deg, #FF6F8B, #95E8A4);
+	-webkit-background-clip: text;
+	text-fill-color: transparent;
+	transition: all 0.2s ease;
 }
 
 /** Segmented control **/
 .segmented-control {
 	position: relative;
 	display: inline-block;
-	width: 100%;
+	width: 400px;
 	color: #4CD964;
 	border: 1px solid currentColor;
 	font-style: normal;
@@ -180,16 +144,6 @@ cursor: not-allowed;
 .segmented-control > input:nth-child(3):checked ~ label:first-of-type:nth-last-of-type(4):after, .segmented-control > input:nth-child(3):checked ~ label:first-of-type:nth-last-of-type(4):before, .segmented-control > input:nth-child(3):checked ~ label:first-of-type:nth-last-of-type(4) ~ label:after, .segmented-control > input:nth-child(3):checked ~ label:first-of-type:nth-last-of-type(4) ~ label:before {
 	left: 50%;
 }
-.segmented-control > input:disabled:nth-child(4) ~ label:nth-of-type(4) {
-opacity: 0.3;
-	cursor: not-allowed;
-}
-.segmented-control > input:nth-child(4):checked ~ label:nth-of-type(4):after, .segmented-control > input:nth-child(4):checked ~ label:nth-of-type(4):before {
-	opacity: 1;
-}
-.segmented-control > input:nth-child(4):checked ~ label:first-of-type:nth-last-of-type(4):after, .segmented-control > input:nth-child(4):checked ~ label:first-of-type:nth-last-of-type(4):before, .segmented-control > input:nth-child(4):checked ~ label:first-of-type:nth-last-of-type(4) ~ label:after, .segmented-control > input:nth-child(4):checked ~ label:first-of-type:nth-last-of-type(4) ~ label:before {
-	left: 75.0%;
-}
 .segmented-control > label {
 	display: inline-block;
 	padding: 0 .71em;
@@ -278,18 +232,41 @@ opacity: 0.3;
 .segmented-control > label:first-of-type:nth-last-of-type(3), .segmented-control > label:first-of-type:nth-last-of-type(3):after, .segmented-control > label:first-of-type:nth-last-of-type(3):before, .segmented-control > label:first-of-type:nth-last-of-type(3) ~ label, .segmented-control > label:first-of-type:nth-last-of-type(3) ~ label:after, .segmented-control > label:first-of-type:nth-last-of-type(3) ~ label:before {
 	width: 33.33333%;
 }
-/*.segmented-control > label:first-of-type:nth-last-of-type(4), .segmented-control > label:first-of-type:nth-last-of-type(4):after, .segmented-control > label:first-of-type:nth-last-of-type(4):before, .segmented-control > label:first-of-type:nth-last-of-type(4) ~ label, .segmented-control > label:first-of-type:nth-last-of-type(4) ~ label:after, .segmented-control > label:first-of-type:nth-last-of-type(4) ~ label:before {
-	width: 25%;
-}*/
-.segmented-control.italic, .segmented-control .italic {
-	font-style: italic;
+
+/** Toggle button **/ 
+.onoffswitch {
+    position: relative; width: 60px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
-.segmented-control.bold, .segmented-control .bold {
-	font-weight: bold;
+.onoffswitch-checkbox {
+    display: none;
 }
-.segmented-control.underline, .segmented-control .underline {
-	text-decoration: underline;
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    height: 30px; padding: 0; line-height: 30px;
+    border: 2px solid #FF6F8B; border-radius: 30px;
+    background-color: #FF6F8B;
+    transition: background-color 0.3s ease-in;
 }
-.segmented-control.line-through, .segmented-control .line-through {
-	text-decoration: line-through;
+.onoffswitch-label:before {
+    content: "";
+    display: block; width: 30px; margin: 0px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 28px;
+    border: 2px solid #FF6F8B; border-radius: 30px;
+    transition: all 0.3s ease-in 0s; 
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label:before{
+	border: 2px solid #CCCCCC; border-radius: 30px;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+    background-color: #4CD964;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+   border-color: #4CD964;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+    right: 0px; 
 }

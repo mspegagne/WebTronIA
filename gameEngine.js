@@ -98,16 +98,16 @@ window.onload = function(){
               ctx.fillStyle='#111';
               break;
             case 1:
-              ctx.fillStyle='#00f';
+              ctx.fillStyle='#96E8A4'; //'#00f';
               break;
             case 2:
-              ctx.fillStyle='#f00';
+              ctx.fillStyle='#FF6F8B';//'#f00';
               break;
             case 3:
-              ctx.fillStyle='#00a';
+              ctx.fillStyle='#4CD964';//'#00a';
               break;
             case 4:
-              ctx.fillStyle='#a00';
+              ctx.fillStyle='#FF2D55';//'#a00';
               break;
           }            
           ctx.fillRect(x*10, y*10, 9, 9); 
@@ -250,8 +250,7 @@ window.onload = function(){
 
   //Write 'message' in div console
   function writeConsole(message) {
-    document.getElementById('console').innerHTML = message; //+"<br>";
-    //document.getElementById('console').scrollTop +=100;
+    document.getElementById('console').innerHTML = message;
   }
  
   //Keyboard listener to manage the keyboard inputs
@@ -262,9 +261,11 @@ window.onload = function(){
 		if(tmr) {
           clearInterval(tmr);
           tmr = undefined;
+		  writeConsole("paused");
         } else {
           if(!game.gameover) {
             tmr = setInterval(frame, FRAMEDELAY);
+			writeConsole("playing...");
           } else {
             init();
           }
@@ -293,6 +294,31 @@ window.onload = function(){
 	document.getElementById('switch').onclick = function(){ 
 		game.p1.ai = this.checked;
 	}
+	
+	/* Controls the nav bar content */
+	var labels = document.getElementsByName('labelbtn');
+	for(i = 0; i < labels.length; i++){
+		labels[i].onclick = function(elt){
+			switch(elt.target.htmlFor){
+				case 'gamebtn':
+					document.getElementById('game-content').style.visibility = "visible";
+					document.getElementById('mode-content').style.visibility = "hidden";
+					document.getElementById('credits-content').style.visibility = "hidden";
+					break;
+				case 'modebtn':
+					document.getElementById('game-content').style.visibility = "hidden";
+					document.getElementById('mode-content').style.visibility = "visible";
+					document.getElementById('credits-content').style.visibility = "hidden";
+					break;
+				case 'creditsbtn':
+					document.getElementById('game-content').style.visibility = "hidden";
+					document.getElementById('mode-content').style.visibility = "hidden";
+					document.getElementById('credits-content').style.visibility = "visible";
+					break;
+			}
+
+		}
+	}
 
   //////////////////// GAME'S FUNCTIONS ////////////////////////
 
@@ -302,10 +328,10 @@ window.onload = function(){
     game.draw(canvas);
     moveq = [];
     tmr = setInterval(frame, FRAMEDELAY);
+	// init the console
+	writeConsole("playing...");
 	// back to the AI vs AI mode
-	document.getElementById('switch').checked = true;
-	// clear the console
-	writeConsole("");
+	document.getElementById('switch').checked = true;	
   }
 
   //Ex Aequo
