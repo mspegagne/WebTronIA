@@ -38,8 +38,8 @@ window.onload = function(){
 	
   //////////////////// VARIABLES FOR GAMEENGINE ////////////////////////
   
-  var FRAMEDELAY = 100;
-  var limitCalc = 3; //Depth of Minimax algo
+  var FRAMEDELAY = 130;
+  var limitCalc = 5; //Depth of Minimax algo
   var dx = [-1,0,1,0]; //Use to calcuate the coordinates
   var dy = [0,-1,0,1]; 
   var tmr;  //Timer   
@@ -58,6 +58,7 @@ window.onload = function(){
     this.space = 0;      
     this.w = 0;
     this.idx = 0;  
+    this.draw = false; //Ex aequo
     this.move = move;  //Move: 0 = left, 1 = up, 2 = right, 3 = down (corresponds to keyCode-37)
 
     //Init positions
@@ -91,8 +92,8 @@ window.onload = function(){
     this.map = []; // Map: 0 = empty, -1 = wall, 1 = player 1, 2 = player 2, 3 = player 1 crashed, 4 = player 2 crashed
     this.w = 0|(canvas.width/10); // width and height constants
     this.h = 0|(canvas.height/10);
-	this.p1 = new Player(1,true,0);
-    this.p2 = new Player(2,true,2);
+    this.p1 = new Player(1,true,2);
+    this.p2 = new Player(2,true,0);
     this.gameover = false;
 
     this.addWall = function(x,y){
@@ -101,9 +102,13 @@ window.onload = function(){
 
     //Add the player's trace
     this.addPlayer = function(player){
+      var adv = (player.id === 1 ? this.p2 : this.p1);
       if(this.isWall(player.x,player.y)){        
         this.map[player.idx] = player.id+2;
-        this.gameover = true; 
+        this.gameover = true;         
+        if(player.idx === adv.idx){        
+          player.draw = true;
+        }
       }
       else{        
         this.map[player.idx] = player.id;
@@ -199,6 +204,7 @@ window.onload = function(){
       }
       else{
         score = this.diffFirstJoinable(player,adv);
+        //console.log(score);
       }
 
       if(this.map[adv.idx] === adv.id+2){
@@ -207,6 +213,10 @@ window.onload = function(){
       if(this.map[player.idx] === player.id+2){
         score = -2000;
       }
+      if(player.draw || adv.draw){
+        score = 0;
+      }
+
       return score;
     }
 
@@ -214,11 +224,11 @@ window.onload = function(){
     //Recursive function
     this.propagation = function(access,x,y,player){
       for(var i=(x-1);i<=(x+1);i++){        
-          if(i<this.w && i>=0 && y<this.h && y>=0 && !this.isWall(i,y) && access[i+y*this.w] !== 1){
-            access[i+y*this.w] = 1;
-            player.space++;
-            this.propagation(access,i,y,player);              
-          }          
+        if(i<this.w && i>=0 && y<this.h && y>=0 && !this.isWall(i,y) && access[i+y*this.w] !== 1){
+          access[i+y*this.w] = 1;
+          player.space++;
+          this.propagation(access,i,y,player);              
+        }          
       }
       for(j=(y-1);j<=(y+1);j++){
         if(x<this.w && x>=0 && j<this.h && j>=0 && !this.isWall(x,j) && access[x+j*this.w] !== 1){
@@ -244,13 +254,15 @@ window.onload = function(){
       var score = 0;
       for(var i=0;i<this.w;i++){ 
         for(var j=0;j<this.h;j++){ 
-          var distancePlayer = Math.sqrt(Math.pow((player.x - i),2)+Math.pow((player.y - j),2)); 
-          var distanceAdv = Math.sqrt(Math.pow((adv.x - i),2)+Math.pow((adv.y - j),2)); 
-          if(distancePlayer < distanceAdv){
-            score++;
-          }
-          if(distancePlayer > distanceAdv){
-            score--;
+          if(!this.isWall(i,j)){
+            var distancePlayer = Math.floor(Math.sqrt(Math.pow((player.x - i),2)+Math.pow((player.y - j),2))); 
+            var distanceAdv = Math.floor(Math.sqrt(Math.pow((adv.x - i),2)+Math.pow((adv.y - j),2))); 
+            if(distancePlayer < distanceAdv){
+              score++;
+            }
+            if(distancePlayer > distanceAdv){
+              score--;
+            }
           }
         }
       }
@@ -298,11 +310,11 @@ window.onload = function(){
 		if(tmr) {
           clearInterval(tmr);
           tmr = undefined;
-		  writeConsole("paused");
+		      writeConsole("paused");
         } else {
           if(!game.gameover) {
             tmr = setInterval(frame, FRAMEDELAY);
-			writeConsole("playing...");
+            writeConsole("playing...");
           } else {
             init();
           }
@@ -335,31 +347,30 @@ window.onload = function(){
     game.draw(canvas);
     moveq = [];
     tmr = setInterval(frame, FRAMEDELAY);
-	// init the console
-	writeConsole("playing...");
-	// back to the AI vs AI mode
-	document.getElementById('switch').checked = true;	
+  	// init the console
+  	writeConsole("playing...");
+  	// back to the AI vs AI mode
+  	document.getElementById('switch').checked = true;	
   }
 
   //Ex Aequo
   function draw(){
     clearInterval(tmr); tmr=undefined;
-    //writeConsole("both players crashed; draw!");
-	writeConsole("draw!");
+  	writeConsole("draw!");
   }
 
   //Player Crash
   function crash(player){
     clearInterval(tmr);
-	tmr=undefined;
-	if(player.id == 1 && !game.p1.ai){
-		writeConsole("You lose!");
-	}else if(player.id == 2 && !game.p1.ai){
-		writeConsole("You win!");
-	}else{	
-		var other = 3-player.id;
-		writeConsole("player "+player.id+" crashed<br/> player "+other+" wins!");
-	}
+  	tmr=undefined;
+  	if(player.id == 1 && !game.p1.ai){
+  		writeConsole("You lose!");
+  	}else if(player.id == 2 && !game.p1.ai){
+  		writeConsole("You win!");
+  	}else{	
+  		var other = 3-player.id;
+  		writeConsole("player "+player.id+" crashed<br/> player "+other+" wins!");
+  	}
   }
 
 
@@ -454,7 +465,7 @@ window.onload = function(){
     return bestMove;
   }
 
-  function minimaxAI(node,depth,maximizing,player,init){   
+  function minimaxAI(node,depth,maximizing,player,init,alpha,beta){   
     var adv = (player.id === 1 ? node.p2 : node.p1);    
     var newPlayer = (player.id === 1 ? node.p1 : node.p2);    
     var newInit = (init.id === 1 ? node.p1 : node.p2);
@@ -464,7 +475,7 @@ window.onload = function(){
       return [node.score(newInit),newPlayer.move];
     }
     else if(maximizing){
-      var bestValue = -3000;
+      var bestValue = -5000;
       for(var newMove = 0; newMove<4; newMove++){
         var newNode = clone(node);
         adv = (player.id === 1 ? newNode.p2 : newNode.p1);    
@@ -472,16 +483,20 @@ window.onload = function(){
         newPlayer.move = newMove;
         newPlayer.updatePosition(newPlayer.x+dx[newPlayer.move],newPlayer.y+dy[newPlayer.move]); 
         newNode.addPlayer(newPlayer);
-        var value = minimaxAI(newNode,(depth-1),false,adv,init)[0];
+        var value = minimaxAI(newNode,(depth-1),false,adv,init,alpha,beta)[0];
         bestValue = Math.max(bestValue,value);
         if(bestValue === value){
           bestMove = newMove;
+        }
+        alpha = Math.max(alpha,value);
+        if(beta <= alpha){
+          break;
         }
       }
       return [bestValue,bestMove];
     }
     else{
-      var bestValue = 3000;
+      var bestValue = 5000;
       for(var newMove = 0; newMove<4; newMove++){
         var newNode = clone(node);
         adv = (player.id === 1 ? newNode.p2 : newNode.p1);    
@@ -489,10 +504,14 @@ window.onload = function(){
         newPlayer.move = newMove;
         newPlayer.updatePosition(newPlayer.x+dx[newPlayer.move],newPlayer.y+dy[newPlayer.move]); 
         newNode.addPlayer(newPlayer);
-        var value = minimaxAI(newNode,(depth-1),true,adv,init)[0];
+        var value = minimaxAI(newNode,(depth-1),true,adv,init,alpha,beta)[0];
+        beta = Math.min(beta,value);
         bestValue = Math.min(bestValue,value);
         if(bestValue === value){
           bestMove = newMove;
+        }
+        if(beta <= alpha){
+          break;
         }
       }
       return [bestValue,bestMove];
@@ -522,7 +541,7 @@ window.onload = function(){
     //Run the AI
     if(p1.ai){ p1.move = lineDist(game, p1);}
     //p2.move = snailAI(game, p2);
-    var minimax = minimaxAI(game, limitCalc, true, p2, p2);
+    var minimax = minimaxAI(game,limitCalc,true,p2,p2,-5000,5000);
     p2.move = minimax[1];
     //writeConsole(minimax[0]);
 
