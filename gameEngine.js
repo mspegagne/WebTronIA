@@ -208,7 +208,7 @@ window.onload = function(){
       }
       else{
         score = this.diffFirstJoinable(player,adv);
-        console.log(score);
+        //console.log(score);
       }
 
       if(this.map[adv.idx] === adv.id+2){
@@ -258,13 +258,15 @@ window.onload = function(){
       var score = 0;
       for(var i=0;i<this.w;i++){ 
         for(var j=0;j<this.h;j++){ 
-          var distancePlayer = Math.sqrt(Math.pow((player.x - i),2)+Math.pow((player.y - j),2)); 
-          var distanceAdv = Math.sqrt(Math.pow((adv.x - i),2)+Math.pow((adv.y - j),2)); 
-          if(distancePlayer < distanceAdv){
-            score++;
-          }
-          if(distancePlayer > distanceAdv){
-            score--;
+          if(!this.isWall(i,j)){
+            var distancePlayer = Math.floor(Math.sqrt(Math.pow((player.x - i),2)+Math.pow((player.y - j),2))); 
+            var distanceAdv = Math.floor(Math.sqrt(Math.pow((adv.x - i),2)+Math.pow((adv.y - j),2))); 
+            if(distancePlayer < distanceAdv){
+              score++;
+            }
+            if(distancePlayer > distanceAdv){
+              score--;
+            }
           }
         }
       }
@@ -312,11 +314,11 @@ window.onload = function(){
 		if(tmr) {
           clearInterval(tmr);
           tmr = undefined;
-		  writeConsole("paused");
+		      writeConsole("paused");
         } else {
           if(!game.gameover) {
             tmr = setInterval(frame, FRAMEDELAY);
-			writeConsole("playing...");
+            writeConsole("playing...");
           } else {
             init();
           }
@@ -545,7 +547,7 @@ window.onload = function(){
     //p2.move = snailAI(game, p2);
     var minimax = minimaxAI(game,limitCalc,true,p2,p2,-5000,5000);
     p2.move = minimax[1];
-    writeConsole(minimax[0]);
+    //writeConsole(minimax[0]);
 
     //Make the p1 move
     p1.updatePosition(p1.x+dx[p1.move],p1.y+dy[p1.move]); 
