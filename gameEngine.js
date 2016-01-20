@@ -42,8 +42,8 @@ window.onload = function(){
 	
   //////////////////// VARIABLES FOR GAMEENGINE ////////////////////////
   
-  var FRAMEDELAY = 120;
-  var limitCalc = 4; //Depth of Minimax algo
+  var FRAMEDELAY = 130;
+  var limitCalc = 5; //Depth of Minimax algo
   var dx = [-1,0,1,0]; //Use to calcuate the coordinates
   var dy = [0,-1,0,1]; 
   var tmr;  //Timer   
@@ -458,7 +458,7 @@ window.onload = function(){
     return bestMove;
   }
 
-  function minimaxAI(node,depth,maximizing,player,init){   
+  function minimaxAI(node,depth,maximizing,player,init,alpha,beta){   
     var adv = (player.id === 1 ? node.p2 : node.p1);    
     var newPlayer = (player.id === 1 ? node.p1 : node.p2);    
     var newInit = (init.id === 1 ? node.p1 : node.p2);
@@ -468,7 +468,7 @@ window.onload = function(){
       return [node.score(newInit),newPlayer.move];
     }
     else if(maximizing){
-      var bestValue = -3000;
+      var bestValue = -5000;
       for(var newMove = 0; newMove<4; newMove++){
         var newNode = clone(node);
         adv = (player.id === 1 ? newNode.p2 : newNode.p1);    
@@ -476,16 +476,20 @@ window.onload = function(){
         newPlayer.move = newMove;
         newPlayer.updatePosition(newPlayer.x+dx[newPlayer.move],newPlayer.y+dy[newPlayer.move]); 
         newNode.addPlayer(newPlayer);
-        var value = minimaxAI(newNode,(depth-1),false,adv,init)[0];
+        var value = minimaxAI(newNode,(depth-1),false,adv,init,alpha,beta)[0];
         bestValue = Math.max(bestValue,value);
         if(bestValue === value){
           bestMove = newMove;
+        }
+        alpha = Math.max(alpha,value);
+        if(beta <= alpha){
+          break;
         }
       }
       return [bestValue,bestMove];
     }
     else{
-      var bestValue = 3000;
+      var bestValue = 5000;
       for(var newMove = 0; newMove<4; newMove++){
         var newNode = clone(node);
         adv = (player.id === 1 ? newNode.p2 : newNode.p1);    
@@ -493,10 +497,14 @@ window.onload = function(){
         newPlayer.move = newMove;
         newPlayer.updatePosition(newPlayer.x+dx[newPlayer.move],newPlayer.y+dy[newPlayer.move]); 
         newNode.addPlayer(newPlayer);
-        var value = minimaxAI(newNode,(depth-1),true,adv,init)[0];
+        var value = minimaxAI(newNode,(depth-1),true,adv,init,alpha,beta)[0];
+        beta = Math.min(beta,value);
         bestValue = Math.min(bestValue,value);
         if(bestValue === value){
           bestMove = newMove;
+        }
+        if(beta <= alpha){
+          break;
         }
       }
       return [bestValue,bestMove];
@@ -526,9 +534,9 @@ window.onload = function(){
     //Run the AI
     if(p1.ai){ p1.move = lineDist(game, p1);}
     //p2.move = snailAI(game, p2);
-    var minimax = minimaxAI(game, limitCalc, true, p2, p2);
+    var minimax = minimaxAI(game, limitCalc, true, p2, p2,-5000,5000);
     p2.move = minimax[1];
-    //writeConsole(minimax[0]);
+    writeConsole(minimax[0]);
 
     //Make the p1 move
     p1.updatePosition(p1.x+dx[p1.move],p1.y+dy[p1.move]); 
