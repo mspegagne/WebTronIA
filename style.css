@@ -1,6 +1,15 @@
 @font-face {
     font-family: "SF";
-    src: url('SystemSanFranciscoDisplayRegular.ttf');
+    src: url('font/SystemSanFranciscoDisplayRegular.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+    font-family: "foundation-icons";
+    src: url('font/foundation-icons.ttf');
+	font-weight: normal;
+	font-style: normal;
 }
 
 body {
@@ -46,6 +55,8 @@ a:hover {
 	border-image-slice: 1;
 	background: linear-gradient(45deg, #FF6F8B, #95E8A4);
 	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
 	text-fill-color: transparent;
 	transition: all 0.2s ease;
 }
@@ -233,6 +244,8 @@ cursor: not-allowed;
 	width: 33.33333%;
 }
 
+
+/***** MODE CONTENT *****/
 /** Toggle button **/ 
 .onoffswitch {
     position: relative; width: 60px;
@@ -269,4 +282,41 @@ cursor: not-allowed;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label:before {
     right: 0px; 
+}
+
+/** alert-box **/
+.alert-box {
+	background: #f7f7f7;
+	color: #333;
+	width: 400px;
+	border: none;
+	border-left: 6px solid grey;
+	box-shadow: 0 5px 8px -6px rgba(0, 0, 0, 0.2);
+}
+
+.alert-box p{
+	margin: 20px;
+}
+
+/** Foundation font **/
+.fi-pause:before,
+.fi-refresh:before {
+  font-family: "foundation-icons";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  text-decoration: inherit;
+}
+
+.fi-refresh:before {
+	content: "\f1a5";
+	font-size: 60px;
+}
+.fi-pause:before {
+	content: "\f191";
+	font-size: 60px;
 }

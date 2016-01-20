@@ -5,6 +5,7 @@ window.onload = function(){
 	/* Toggle the game mode */
 	document.getElementById('switch').onclick = function(){ 
 		game.p1.ai = this.checked;
+		displayMsg(this.checked);
 	}
 	
 	/* Controls the nav bar content */
@@ -12,7 +13,7 @@ window.onload = function(){
 	// init the Mode button to checked
 	var cur = document.getElementById('modebtn')
 	//cur.setAttribute('checked', true);
-	display(cur);
+	displayTabContent(cur);
 	
 	// listener on clicked tabs
 	var labels = document.getElementsByName('labelbtn');
@@ -21,17 +22,28 @@ window.onload = function(){
 			document.getElementById(elt.target.htmlFor).setAttribute('checked', true);
 			document.getElementById(cur.id).setAttribute('checked', false);
 			cur = document.getElementById(elt.target.htmlFor);
-			display(cur);
+			displayTabContent(cur);
 		}
 	}
 	
 	// Shows the current tab's content and hide the others
-	function display(key){
+	function displayTabContent(key){
 		for(var b in btn){
 			if(b == key.id){							
 				document.getElementById(btn[b]).style.display = 'flex';
 			} else {
 				document.getElementById(btn[b]).style.display = 'none';
+			}
+		}
+	}
+	
+	var msgMode = ['player-vs-ai', 'ai-vs-ai'];
+	function displayMsg(val){
+		for(i = 0; i < msgMode.length; i++){
+			if(val == i){
+				document.getElementById(msgMode[i]).style.display = "block";
+			} else {
+				document.getElementById(msgMode[i%2]).style.display = "none";
 			}
 		}
 	}
@@ -322,6 +334,7 @@ window.onload = function(){
         break;
       case 65: // A
         game.p1.ai = !game.p1.ai;
+		document.getElementById('switch').checked = game.p1.ai;
 		
         break;
       case 37: // left
@@ -349,8 +362,7 @@ window.onload = function(){
     tmr = setInterval(frame, FRAMEDELAY);
   	// init the console
   	writeConsole("playing...");
-  	// back to the AI vs AI mode
-  	document.getElementById('switch').checked = true;	
+	displayMsg(game.p1.ai);
   }
 
   //Ex Aequo
