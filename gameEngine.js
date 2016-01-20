@@ -1,4 +1,45 @@
 window.onload = function(){
+
+ //////////////////// GAME'S FUNCTIONS ////////////////////////
+  
+	/* Toggle the game mode */
+	document.getElementById('switch').onclick = function(){ 
+		game.p1.ai = this.checked;
+	}
+	
+	/* Controls the nav bar content */
+	var labels = document.getElementsByName('labelbtn');
+	for(i = 0; i < labels.length; i++){
+		labels[i].onclick = function(elt){
+			console.log(elt);
+			switch(elt.target.htmlFor){
+				case 'gamebtn':
+					//document.getElementById('game-content').style.visibility = "visible";
+					hide(document.getElementById('mode-content')) ;//.style.visibility = "hidden";
+					hide(document.getElementById('credits-content')); //.style.visibility = "hidden";
+					break;
+				case 'modebtn':
+					document.getElementById('game-content').style.visibility = "hidden";
+					document.getElementById('mode-content').style.visibility = "visible";
+					document.getElementById('credits-content').style.visibility = "hidden";
+					break;
+				case 'creditsbtn':
+					document.getElementById('game-content').style.visibility = "hidden";
+					document.getElementById('mode-content').style.visibility = "hidden";
+					document.getElementById('credits-content').style.visibility = "visible";
+					break;
+			}
+
+		}
+	}
+	
+	function hide (elements) {
+		elements = elements.length ? elements : [elements];
+		for (var index = 0; index < elements.length; index++) {
+			elements[index].style.display = 'none';
+		}
+	}
+	
   //////////////////// VARIABLES FOR GAMEENGINE ////////////////////////
   
   var FRAMEDELAY = 100;
@@ -289,36 +330,6 @@ window.onload = function(){
         break;
     }
   }
-  
-	/* Toggle the game mode */
-	document.getElementById('switch').onclick = function(){ 
-		game.p1.ai = this.checked;
-	}
-	
-	/* Controls the nav bar content */
-	var labels = document.getElementsByName('labelbtn');
-	for(i = 0; i < labels.length; i++){
-		labels[i].onclick = function(elt){
-			switch(elt.target.htmlFor){
-				case 'gamebtn':
-					document.getElementById('game-content').style.visibility = "visible";
-					document.getElementById('mode-content').style.visibility = "hidden";
-					document.getElementById('credits-content').style.visibility = "hidden";
-					break;
-				case 'modebtn':
-					document.getElementById('game-content').style.visibility = "hidden";
-					document.getElementById('mode-content').style.visibility = "visible";
-					document.getElementById('credits-content').style.visibility = "hidden";
-					break;
-				case 'creditsbtn':
-					document.getElementById('game-content').style.visibility = "hidden";
-					document.getElementById('mode-content').style.visibility = "hidden";
-					document.getElementById('credits-content').style.visibility = "visible";
-					break;
-			}
-
-		}
-	}
 
   //////////////////// GAME'S FUNCTIONS ////////////////////////
 
