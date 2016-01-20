@@ -1,7 +1,24 @@
 window.onload = function(){
 
- //////////////////// GAME'S FUNCTIONS ////////////////////////
+ //////////////////// UI'S FUNCTIONS ////////////////////////
   
+	 var player1 = document.getElementById('player1');
+     var player1Ctx = player1.getContext('2d');
+	 player1Ctx.fillStyle='#96E8A4';
+	 player1Ctx.fillRect(20, 0, 9, 9);
+	 player1Ctx.fillRect(10, 0, 9, 9);
+	 player1Ctx.fillRect(10, 10, 9, 9);
+	 player1Ctx.fillRect(0, 10, 9, 9);
+	 
+	 var player2 = document.getElementById('player2');
+     var player2Ctx = player2.getContext('2d');
+	 player2Ctx.fillStyle='#FF6F8B';
+	 player2Ctx.fillRect(20, 0, 9, 9);
+	 player2Ctx.fillRect(10, 0, 9, 9);
+	 player2Ctx.fillRect(10, 10, 9, 9);
+	 player2Ctx.fillRect(0, 10, 9, 9);
+	 
+	
 	/* Toggle the game mode */
 	document.getElementById('switch').onclick = function(){ 
 		game.p1.ai = this.checked;
@@ -141,7 +158,6 @@ window.onload = function(){
       var canvas = document.getElementById('canvas');
       var ctx = canvas.getContext('2d');
       ctx.clearRect(0,0,canvas.width,canvas.height);
-
       for(var j=0;j<this.h*this.w;j++){
         var x = j%this.w;
         var y = Math.floor(j/this.w);
@@ -335,7 +351,7 @@ window.onload = function(){
       case 65: // A
         game.p1.ai = !game.p1.ai;
 		document.getElementById('switch').checked = game.p1.ai;
-		
+		displayMsg(game.p1.ai);
         break;
       case 37: // left
       case 38: // up

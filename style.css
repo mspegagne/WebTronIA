@@ -34,7 +34,7 @@ a:hover {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .item{
@@ -73,6 +73,7 @@ a:hover {
 	text-decoration: none;
 	overflow: hidden;
 	margin: .8em auto;
+	margin-top: 0;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
@@ -295,13 +296,14 @@ cursor: not-allowed;
 }
 
 .alert-box p{
-	margin: 20px;
+	margin: 15px;
 }
 
 /** Foundation font **/
 .fi-pause:before,
 .fi-refresh:before {
   font-family: "foundation-icons";
+  font-size: 60px;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -310,13 +312,13 @@ cursor: not-allowed;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
   text-decoration: inherit;
+  cursor: pointer;
 }
 
 .fi-refresh:before {
 	content: "\f1a5";
-	font-size: 60px;
+	
 }
 .fi-pause:before {
 	content: "\f191";
-	font-size: 60px;
 }
