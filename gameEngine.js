@@ -62,6 +62,7 @@ window.onload = function(){
     this.space = 0;      
     this.w = 0;
     this.idx = 0;  
+    this.draw = false; //Ex aequo
     this.move = move;  //Move: 0 = left, 1 = up, 2 = right, 3 = down (corresponds to keyCode-37)
 
     //Init positions
@@ -105,9 +106,13 @@ window.onload = function(){
 
     //Add the player's trace
     this.addPlayer = function(player){
+      var adv = (player.id === 1 ? this.p2 : this.p1);
       if(this.isWall(player.x,player.y)){        
         this.map[player.idx] = player.id+2;
-        this.gameover = true; 
+        this.gameover = true;         
+        if(player.idx === adv.idx){        
+          player.draw = true;
+        }
       }
       else{        
         this.map[player.idx] = player.id;
@@ -203,6 +208,7 @@ window.onload = function(){
       }
       else{
         score = this.diffFirstJoinable(player,adv);
+        console.log(score);
       }
 
       if(this.map[adv.idx] === adv.id+2){
@@ -211,6 +217,10 @@ window.onload = function(){
       if(this.map[player.idx] === player.id+2){
         score = -2000;
       }
+      if(player.draw || adv.draw){
+        score = 0;
+      }
+
       return score;
     }
 
@@ -339,31 +349,30 @@ window.onload = function(){
     game.draw(canvas);
     moveq = [];
     tmr = setInterval(frame, FRAMEDELAY);
-	// init the console
-	writeConsole("playing...");
-	// back to the AI vs AI mode
-	document.getElementById('switch').checked = true;	
+  	// init the console
+  	writeConsole("playing...");
+  	// back to the AI vs AI mode
+  	document.getElementById('switch').checked = true;	
   }
 
   //Ex Aequo
   function draw(){
     clearInterval(tmr); tmr=undefined;
-    //writeConsole("both players crashed; draw!");
-	writeConsole("draw!");
+  	writeConsole("draw!");
   }
 
   //Player Crash
   function crash(player){
     clearInterval(tmr);
-	tmr=undefined;
-	if(player.id == 1 && !game.p1.ai){
-		writeConsole("You lose!");
-	}else if(player.id == 2 && !game.p1.ai){
-		writeConsole("You win!");
-	}else{	
-		var other = 3-player.id;
-		writeConsole("player "+player.id+" crashed<br/> player "+other+" wins!");
-	}
+  	tmr=undefined;
+  	if(player.id == 1 && !game.p1.ai){
+  		writeConsole("You lose!");
+  	}else if(player.id == 2 && !game.p1.ai){
+  		writeConsole("You win!");
+  	}else{	
+  		var other = 3-player.id;
+  		writeConsole("player "+player.id+" crashed<br/> player "+other+" wins!");
+  	}
   }
 
 
@@ -534,7 +543,7 @@ window.onload = function(){
     //Run the AI
     if(p1.ai){ p1.move = lineDist(game, p1);}
     //p2.move = snailAI(game, p2);
-    var minimax = minimaxAI(game, limitCalc, true, p2, p2,-5000,5000);
+    var minimax = minimaxAI(game,limitCalc,true,p2,p2,-5000,5000);
     p2.move = minimax[1];
     writeConsole(minimax[0]);
 
