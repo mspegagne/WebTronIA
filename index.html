@@ -16,7 +16,7 @@
 	</head>
 
 	<body>
-		<div class="container">
+		<div class="main-container">
 			<h1> TRON GAME </h1>
 			
 			<canvas id="canvas" width="400" height="300"></canvas>
@@ -34,49 +34,47 @@
 			</div>
 			
 			<!-- Game tab -->
-			<div id="game-content">
-				<div class="container">
-					<div class="alert-box item">
-						<p>Tron is a two-player game where each player controls a snake trapped inside a maze.
-						When a player moves his snake, its size grows.
-						The last player to crash on a wall or on a snake's trail wins.
-						If the two players crash simultaneously, it is a draw.</p>
-					</div>
-					<div class="flex-content">
-						<canvas class="item" id="player1" width="30" height="20"></canvas>
-						<p class="item">Player 1</p>
-						<canvas class="item" id="player2" width="30" height="20"></canvas>
-						<p class="item">Player 2</p>
-					</div>
+			<div id="game-content" class="container">
+				<div class="alert-box item">
+					<p>Tron is a two-player game where each player controls a snake trapped inside a maze.
+					When a player moves his snake, its size grows.
+					The last player to crash on a wall or on a snake's trail wins.
+					If the two players crash simultaneously, it is a draw.</p>
+				</div>
+				<div class="flex-content">
+					<canvas class="item" id="player1" width="30" height="20"></canvas>
+					<p class="item">Player 1</p>
+					<canvas class="item" id="player2" width="30" height="20"></canvas>
+					<p class="item">Player 2</p>
 				</div>
 			</div>	
 			
 			<!-- Mode tab -->
-			<div id="mode-content">
-				<div class="container">
-					<div class="flex-content item">	
-						<label class="item">PLAYER vs AI</label>
-						<div class="onoffswitch item">
-							<input type="checkbox" name="switch" class="onoffswitch-checkbox" id="switch" checked />
-							<label class="onoffswitch-label" for="switch"></label>
-						</div>
-						<label class="item">AI vs AI</label>
+			<div id="mode-content" class="container">
+				<div class="flex-content item">	
+					<label class="item">PLAYER vs AI</label>
+					<div class="onoffswitch item">
+						<input type="checkbox" name="switch" class="onoffswitch-checkbox" id="switch" checked />
+						<label class="onoffswitch-label" for="switch"></label>
 					</div>
+					<label class="item">AI vs AI</label>
+				</div>
 
-					<div class="alert-box item">
+				
+				<div class="flex-content">
+					<div class="alert-box item">				
 						<p id="player-vs-ai">Use the arrow keys to move the green player</p>
-						<p id="ai-vs-ai">Both the green and the pink snakes are controlled by the computer</p>
+						<p id="ai-vs-ai">Both the green and the pink snakes are controlled by the computer</p>				
 					</div>
-					
-					<!--div class="item">
-						<i class="fi-pause"></i>
-						<i class="fi-refresh"></i>
-					</div-->
+					<div class="center">
+						<div><i id="pause" class="fi-pause tip" title="PAUSE"></i></div>
+						<div><i id="refresh" class="fi-refresh tip" title="REFRESH"></i></div>
+					</div>
 				</div>
 			</div>
 			
 			<!-- Credits tab -->
-			<div id="credits-content">
+			<div id="credits-content" class="container">
 				<div class="alert-box item">
 					<p>Game designed by Mathieu Spegagne and Delphine Millet. <br/>
 					This is an assignment for the AI course at INSA Rennes (France)</p>

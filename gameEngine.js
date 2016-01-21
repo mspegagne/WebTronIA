@@ -1,28 +1,44 @@
 window.onload = function(){
 
  //////////////////// UI'S FUNCTIONS ////////////////////////
-  
+  	 
 	 var player1 = document.getElementById('player1');
-     var player1Ctx = player1.getContext('2d');
-	 player1Ctx.fillStyle='#96E8A4';
-	 player1Ctx.fillRect(20, 0, 9, 9);
-	 player1Ctx.fillRect(10, 0, 9, 9);
-	 player1Ctx.fillRect(10, 10, 9, 9);
-	 player1Ctx.fillRect(0, 10, 9, 9);
-	 
 	 var player2 = document.getElementById('player2');
-     var player2Ctx = player2.getContext('2d');
-	 player2Ctx.fillStyle='#FF6F8B';
-	 player2Ctx.fillRect(20, 0, 9, 9);
-	 player2Ctx.fillRect(10, 0, 9, 9);
-	 player2Ctx.fillRect(10, 10, 9, 9);
-	 player2Ctx.fillRect(0, 10, 9, 9);
+	 drawPlayer(player1, '#96E8A4');	 
+	 drawPlayer(player2, '#FF6F8B');
+	 
+	 /* Draw the players in game tab's content */
+	 function drawPlayer(player, color){
+		var ctx = player.getContext('2d');
+		ctx.fillStyle = color;
+		ctx.fillRect(20, 0, 9, 9);
+		ctx.fillRect(10, 0, 9, 9);
+		ctx.fillRect(10, 10, 9, 9);
+		ctx.fillRect(0, 10, 9, 9);
+	 }
 	 
 	
 	/* Toggle the game mode */
 	document.getElementById('switch').onclick = function(){ 
 		game.p1.ai = this.checked;
 		displayMsg(this.checked);
+	}
+	
+	/* listener on pause button */
+	document.getElementById('pause').onclick = function(){
+		if(tmr) {
+			clearInterval(tmr);
+			tmr = undefined;
+			writeConsole("paused");
+		} else if(!game.gameover) {
+			tmr = setInterval(frame, FRAMEDELAY);
+			writeConsole("playing...");
+		}
+	}
+	
+	/* listener on refresh button */
+	document.getElementById('refresh').onclick = function(){
+		init();
 	}
 	
 	/* Controls the nav bar content */
@@ -121,7 +137,7 @@ window.onload = function(){
     this.map = []; // Map: 0 = empty, -1 = wall, 1 = player 1, 2 = player 2, 3 = player 1 crashed, 4 = player 2 crashed
     this.w = 0|(canvas.width/10); // width and height constants
     this.h = 0|(canvas.height/10);
-    this.p1 = new Player(1,true,2);
+    this.p1 = new Player(1,document.getElementById('switch').checked,2);
     this.p2 = new Player(2,true,0);
     this.gameover = false;
 
@@ -168,16 +184,16 @@ window.onload = function(){
               ctx.fillStyle='#111';
               break;
             case 1:
-              ctx.fillStyle='#96E8A4'; //'#00f';
+              ctx.fillStyle='#96E8A4';
               break;
             case 2:
-              ctx.fillStyle='#FF6F8B';//'#f00';
+              ctx.fillStyle='#FF6F8B';
               break;
             case 3:
-              ctx.fillStyle='#4CD964';//'#00a';
+              ctx.fillStyle='#4CD964';
               break;
             case 4:
-              ctx.fillStyle='#FF2D55';//'#a00';
+              ctx.fillStyle='#FF2D55';
               break;
           }            
           ctx.fillRect(x*10, y*10, 9, 9); 
@@ -338,7 +354,7 @@ window.onload = function(){
 		if(tmr) {
           clearInterval(tmr);
           tmr = undefined;
-		      writeConsole("paused");
+		  writeConsole("paused");
         } else {
           if(!game.gameover) {
             tmr = setInterval(frame, FRAMEDELAY);

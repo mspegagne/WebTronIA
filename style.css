@@ -24,10 +24,21 @@ a:hover {
   text-decoration: underline;
 }
 
+.center{	
+  text-align: center;
+}
+
+.main-container{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 .container{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	width: 400px;
 }
 
 .flex-content {
@@ -66,7 +77,7 @@ a:hover {
 	position: relative;
 	display: inline-block;
 	width: 400px;
-	color: #4CD964;
+	color: #96E8A4;
 	border: 1px solid currentColor;
 	font-style: normal;
 	font-weight: normal;
@@ -258,8 +269,8 @@ cursor: not-allowed;
 .onoffswitch-label {
     display: block; overflow: hidden; cursor: pointer;
     height: 30px; padding: 0; line-height: 30px;
-    border: 2px solid #FF6F8B; border-radius: 30px;
-    background-color: #FF6F8B;
+    border: 2px solid #96E8A4; border-radius: 30px;
+    background-color: #96E8A4;
     transition: background-color 0.3s ease-in;
 }
 .onoffswitch-label:before {
@@ -268,7 +279,7 @@ cursor: not-allowed;
     background: #FFFFFF;
     position: absolute; top: 0; bottom: 0;
     right: 28px;
-    border: 2px solid #FF6F8B; border-radius: 30px;
+    border: 2px solid #96E8A4; border-radius: 30px;
     transition: all 0.3s ease-in 0s; 
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label:before{
@@ -276,10 +287,10 @@ cursor: not-allowed;
 }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label {
-    background-color: #4CD964;
+    background-color: #FF6F8B;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
-   border-color: #4CD964;
+   border-color: #FF6F8B;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label:before {
     right: 0px; 
@@ -289,7 +300,7 @@ cursor: not-allowed;
 .alert-box {
 	background: #f7f7f7;
 	color: #333;
-	width: 400px;
+	/*width: 400px;*/
 	border: none;
 	border-left: 6px solid grey;
 	box-shadow: 0 5px 8px -6px rgba(0, 0, 0, 0.2);
@@ -303,16 +314,18 @@ cursor: not-allowed;
 .fi-pause:before,
 .fi-refresh:before {
   font-family: "foundation-icons";
-  font-size: 60px;
+  font-size: 36px;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
+  color: grey;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
   text-decoration: inherit;
   cursor: pointer;
+  margin: 0 10px;
 }
 
 .fi-refresh:before {
