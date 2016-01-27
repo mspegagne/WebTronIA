@@ -13,7 +13,7 @@ A second one, implemented but not played, is the snail AI. This one decides whic
 
 #### MiniMax AI
 
-This one is the cleverest and is played by the pink player (player 2). This is an implementation of the [minimax algo](https://en.wikipedia.org/wiki/Minimax) with alpha-beta prerunning. To evaluate a score for each player, we have these heuristics :
+This one is the cleverest and is played by the pink player (player 2). This is an implementation of the [minimax algo](https://en.wikipedia.org/wiki/Minimax) with alpha-beta pruning. To evaluate a score for each player, we have these heuristics :
 
 * If both players can't be joined (there is a wall between them), then the score is their free space.
 * Else the score is the difference between the number of first joinable position on the map.
